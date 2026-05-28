@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "../../components/layout/Navbar";
 import Sidebar from "../../components/layout/Sidebar";
+import DashboardStatsContainer from "../../components/dashboard/DashboardStatsContainer";
 
 const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: "home" },
@@ -22,12 +23,24 @@ function DashboardPage() {
       <Sidebar
         navItems={navItems}
         isOpen={isSidebarOpen}
-        isClose={() => setSidebarOpen(false)}
+        // onClose={() => setSidebarOpen(false)}
       />
 
-      <main className="md:ml-72 p-6">
-        <h2 className="text-lg font-semibold text-text-primary">Dashboard</h2>
-      </main>
+      <div className="md:ml-72">
+        <main className="min-h-[calc(100vh-4.5rem)] overflow-y-auto px-4 pb-8 pt-6 sm:px-6 lg:px-8">
+          <div className="mx-auto flex min-h-full max-w-7xl flex-col gap-6">
+            <header className="rounded-lg border border-(--border-default) bg-(--bg-surface) px-6 py-6 shadow-subtle">
+              <h1 className="text-3xl font-semibold text-(--text-primary)">
+                Dashboard
+              </h1>
+            </header>
+
+            <section className="grid gap-6" aria-label="Dashboard content">
+              <DashboardStatsContainer />
+            </section>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

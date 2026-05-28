@@ -23,13 +23,9 @@ function Navbar({
   return (
     <nav className="sticky top-0 z-40 h-18 bg-(--bg-surface) border-b border-(--border-default) backdrop-blur-sm">
       <div className="h-full px-(--space-2) sm:px-(--space-3) lg:px-(--space-4) flex items-center justify-between gap-(--space-3)">
-        {/* LEFT: Page Title Placeholder */}
         <div className="hidden sm:flex items-center min-w-0">
-          <h1 className="text-sm font-semibold text-(--text-primary) truncate">
-            Dashboard
-          </h1>
+          <h1 className="text-sm font-semibold text-(--text-primary) truncate"></h1>
         </div>
-
         {/* Menu Button */}
         <button
           onClick={onMenuClick}
@@ -42,7 +38,6 @@ function Navbar({
             <Menu className="w-5 h-5" />
           )}
         </button>
-
         {/* CENTER: Search Bar */}
         <div className="flex-1 max-w-lg">
           <div
@@ -62,7 +57,6 @@ function Navbar({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--text-secondary)" />
           </div>
         </div>
-
         {/* RIGHT: Actions & Profile */}
         <div className="flex items-center gap-(--space-2)">
           {/* Notification Icon */}

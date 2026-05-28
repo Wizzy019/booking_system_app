@@ -34,7 +34,7 @@ interface SidebarProps {
 }
 
 function Sidebar({
-  brandName = "Your Company",
+  brandName = "WBS",
   logo,
   navItems,
   isOpen,
