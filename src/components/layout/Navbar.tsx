@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Search, Bell, Menu, User, X } from "lucide-react";
+import { useAuthStore } from "../../features/auth/hooks/authStore";
 
 interface NavbarProps {
-  userName?: string;
-  userRole?: string;
   onProfileClick?: () => void;
   onMenuClick?: () => void;
   onNotificationClick?: () => void;
@@ -11,14 +10,19 @@ interface NavbarProps {
 }
 
 function Navbar({
-  userName = "Wizzy Aro",
-  userRole = "Admin",
   onProfileClick,
   onMenuClick,
   onNotificationClick,
   isSidebarOpen,
 }: NavbarProps) {
   const [isFocused, setIsFocused] = useState(false);
+
+  const { user } = useAuthStore();
+
+  console.log(user);
+
+  const email = user?.email;
+  const role = user?.role;
 
   return (
     <nav className="sticky top-0 z-40 h-18 bg-(--bg-surface) border-b border-(--border-default) backdrop-blur-sm">
@@ -82,10 +86,10 @@ function Navbar({
             {/* Profile Info - Desktop Only */}
             <div className="hidden md:flex flex-col items-start gap-0.5 min-w-0">
               <span className="text-xs font-semibold text-(--text-primary) truncate">
-                {userName}
+                {email}
               </span>
               <span className="text-xs text-(--text-muted) truncate">
-                {userRole}
+                {role}
               </span>
             </div>
           </button>
