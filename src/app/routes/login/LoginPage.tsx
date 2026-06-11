@@ -3,7 +3,7 @@ import LeftPanel from "./LeftPanel";
 import LoginCard from "./LoginCard";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../features/auth/hooks/authStore";
-import { useLoader } from "../../../components/contexts/LoaderContext";
+import { useLoader } from "../../../contexts/LoaderContext";
 
 export default function LoginPage(): React.JSX.Element {
   const [email, setEmail] = useState<string>("");
@@ -15,19 +15,23 @@ export default function LoginPage(): React.JSX.Element {
 
   const { login } = useAuthStore();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const error = useAuthStore((state) => state.error);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     showLoader();
 
     try {
       await login(email, password);
 
-      navigate("/dashboard");
-    } catch (err) {
-      console.log(err);
-    }
+      const latestError = useAuthStore.getState().error;
 
+      if (!latestError) {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.log("unexpected error:", err);
+    }
     hideLoader();
   };
 
@@ -49,6 +53,7 @@ export default function LoginPage(): React.JSX.Element {
             email={email}
             password={password}
             rememberMe={rememberMe}
+            error={error}
             setEmail={setEmail}
             setPassword={setPassword}
             setRememberMe={setRememberMe}

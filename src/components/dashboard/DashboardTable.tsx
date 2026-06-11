@@ -52,7 +52,7 @@ function DashboardTable({ bookings }: Props) {
         </thead>
 
         <tbody>
-          {bookings.length === 0 ? (
+          {bookings?.length === 0 ? (
             <tr>
               <td
                 colSpan={5}
@@ -62,7 +62,7 @@ function DashboardTable({ bookings }: Props) {
               </td>
             </tr>
           ) : (
-            bookings.map((booking) => (
+            bookings?.map((booking) => (
               <tr
                 key={booking.id}
                 className="border-b border-(--border-first) last:border-0 transition-all duration-200 hover:bg-(--surface-hover)"

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import FintechLoader from "../ui/FintechLoader";
+import FintechLoader from "../components/ui/FintechLoader";
 
 type LoaderContextType = {
   loading: boolean;

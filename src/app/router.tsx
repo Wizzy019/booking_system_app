@@ -1,13 +1,13 @@
 import { createHashRouter } from "react-router-dom";
-import BookingPage from "./routes/BookingPage";
 import LoginPage from "./routes/login/LoginPage";
 import DashboardPage from "./routes/DashboardPage";
 import ProtectedRoute from "../utils/ProtectedRoute";
+import Home from "./routes/Home";
 
 export const router = createHashRouter([
   {
     path: "/",
-    element: <BookingPage />,
+    element: <Home />,
   },
   {
     path: "/login",

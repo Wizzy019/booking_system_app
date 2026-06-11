@@ -1,13 +1,15 @@
 import React from "react";
 import InputField from "./InputField";
 
-import { LogoMark, IconMail, IconLock, IconEye, IconEyeOff } from "./Icons";
+import { IconMail, IconLock, IconEye, IconEyeOff } from "./Icons";
+import Logo from "../../../assets/logo.svg";
 import { useAuthStore } from "../../../features/auth/hooks/authStore";
 
 interface LoginCardProps {
   id?: string;
   email: string;
   password: string;
+  error: string | null;
   rememberMe: boolean;
 
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -23,6 +25,7 @@ export default function LoginCard({
   email,
   password,
   rememberMe,
+  error,
   setEmail,
   setPassword,
   setRememberMe,
@@ -34,30 +37,34 @@ export default function LoginCard({
   const { loading } = useAuthStore();
 
   return (
-    <div className="flex flex-col rounded-[20px] p-8 md:p-10 bg-(--bg-surface) border border-(--border-default) shadow-[0_12px_40px_rgba(2,6,23,0.6)] gap-6">
+    <div className="flex flex-col rounded-xl p-6 bg-(--bg-surface) border border-(--border-default) shadow-[0_12px_40px_rgba(2,6,23,0.6)] gap-4">
       {/* BRAND */}
-      <div className="flex items-center gap-3 mb-4">
-        <LogoMark />
-        <span className="text-[15px] font-semibold tracking-wide text-(--text-primary)">
-          Business logo
-        </span>
+      <div className="flex items-center gap-2 mb-3">
+        <img src={Logo} alt="logo" className="size-20" />
+        <span className="text-sm font-semibold tracking-wide text-(--text-primary)"></span>
       </div>
 
       {/* HEADER */}
-      <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl text-(--text-primary) font-extrabold tracking-tight leading-tight mb-2">
+      <div className="mb-4">
+        <h1 className="text-xl md:text-2xl text-(--text-primary) font-extrabold tracking-tight leading-tight mb-1">
           Welcome Back
         </h1>
 
-        <p className="text-sm text-(--text-secondary) leading-relaxed">
+        <p className="text-xs md:text-sm text-(--text-secondary) leading-snug">
           Sign in to manage bookings and appointments
         </p>
       </div>
 
       {/* FORM */}
-      <form onSubmit={onSubmit} noValidate className="space-y-5">
+      <form onSubmit={onSubmit} noValidate className="space-y-4">
+        {/* ERROE */}
+        {error && (
+          <div className="text-red-500 text-sm px-3 py-1  border-(--border-default) rounded-2xl text-center max-h-20 overflow-auto break-words whitespace-normal">
+            {error}
+          </div>
+        )}
         {/* INPUTS */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <InputField
             id="email"
             type="email"
@@ -90,7 +97,7 @@ export default function LoginCard({
         </div>
 
         {/* REMEMBER + FORGOT */}
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center justify-between pt-1">
           <label className="group flex items-center gap-3 cursor-pointer select-none">
             <input
               type="checkbox"
@@ -119,7 +126,7 @@ export default function LoginCard({
               )}
             </div>
 
-            <span className="text-sm text-(--text-secondary) transition-colors group-hover:text-(--text-primary)">
+            <span className="text-xs text-(--text-secondary) transition-colors group-hover:text-(--text-primary)">
               Remember me
             </span>
           </label>
@@ -136,15 +143,14 @@ export default function LoginCard({
         {/* CTA */}
         <button
           type="submit"
-          className="h-12 w-full rounded-lg bg-(--primary) hover:bg-(--primary-hover) text-sm font-semibold tracking-wide
-           text-white transition-transform duration-150 active:scale-[0.985] shadow-sm hover:shadow-md"
+          className="h-10 w-full rounded-lg bg-(--primary) hover:bg-(--primary-hover) text-sm font-semibold tracking-wide text-white transition-transform duration-150 active:scale-[0.985] shadow-sm hover:shadow-md"
         >
           {loading ? "Loggng in ..." : "Primary Login"}
         </button>
       </form>
 
       {/* DIVIDER */}
-      <div className="my-8 border-t border-[rgba(255,255,255,0.06)]" />
+      <div className="my-6 border-t border-[rgba(255,255,255,0.06)]" />
       {/* SECONDARY ACTION */}
       <button
         type="button"

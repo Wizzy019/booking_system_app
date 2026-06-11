@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import api from "../../../lib/api";
+import { getErrorMessage } from "../../../utils/erroMessage";
 
 export type User = {
   id: string;
@@ -16,7 +17,8 @@ type AuthState = {
   loading: boolean;
   hydrated: boolean;
   isAuthChecked: boolean;
-
+  error: string | null;
+  setError: (error: string | null) => void;
   setHydrated: (value: boolean) => void;
 
   isAuthenticated: boolean;
@@ -34,8 +36,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   loading: false,
   hydrated: false,
   isAuthChecked: false,
+  error: null,
+  setError: (error) => set({ error }),
   setHydrated: (value) => set({ hydrated: value }),
-
   get isAuthenticated() {
     return !!get().token;
   },
@@ -85,7 +88,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   //  LOGIN
   login: async (email, password) => {
-    set({ loading: true });
+    set({ loading: true, error: null });
 
     try {
       const res = await api.post("/auth/login", {
@@ -100,8 +103,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
       await get().fetchUser();
     } catch (error) {
-      console.log(error);
-      throw error;
+      const message = getErrorMessage(error);
+      set({ error: message, token: null });
+      // throw error;
     } finally {
       set({ loading: false });
     }

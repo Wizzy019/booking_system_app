@@ -18,7 +18,6 @@ function Navbar({
   const [isFocused, setIsFocused] = useState(false);
 
   const { user } = useAuthStore();
-  console.log(user);
 
   const full_name = `${user?.first_name} ${user?.last_name}`;
   const avater = user?.avater;

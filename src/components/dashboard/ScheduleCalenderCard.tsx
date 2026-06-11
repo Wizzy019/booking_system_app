@@ -71,7 +71,7 @@ export default function ScheduleCalendarCard({
   const bookingMap = useMemo(() => {
     const map: Record<string, Record<string, Booking[]>> = {};
 
-    bookings.forEach((booking) => {
+    bookings?.forEach((booking) => {
       const day = getDay(booking.date);
       const slot = normalizeTimeSlot(booking.time_slot);
 

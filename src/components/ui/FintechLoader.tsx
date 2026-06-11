@@ -328,8 +328,8 @@ export default function FintechLoader({
 
       {/* ── Glassmorphism loader overlay ──────────────────── */}
       <div
-        className={`fixed inset-0 flex items-center justify-center z-9999 transition-opacity duration-300 
-          ${isLoading ? "opacity-100 pointer-events-auto " : "opacity-0 pointer-events-none"}`}
+        className="fixed inset-0 flex items-center justify-center z-9999 transition-opacity duration-300 
+         opacity-100 pointer-events-auto"
         style={{
           background: "transparent",
         }}

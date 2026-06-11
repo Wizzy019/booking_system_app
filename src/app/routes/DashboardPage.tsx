@@ -5,10 +5,11 @@ import DashboardStatsContainer from "../../components/dashboard/DashboardStatsCo
 import DashboardTable from "../../components/dashboard/DashboardTable";
 import ScheduleCalendarCard from "../../components/dashboard/ScheduleCalenderCard";
 import { useAuthStore } from "../../features/auth/hooks/authStore";
+import { useBooking } from "../../hooks/useBooking";
 
 const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: "home" },
-  { label: "Bookings", to: "/", icon: "calendar" },
+  { label: "Bookings", to: "/bookins", icon: "calendar" },
   { label: "Analytics", to: "/analytics", icon: "chart" },
   { label: "Settings", to: "/settings", icon: "settings" },
 ];
@@ -17,7 +18,10 @@ function DashboardPage() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const { logout } = useAuthStore();
 
-  const bookings = [];
+  const { data: bookingData, error } = useBooking();
+  if (error) {
+    console.log(error);
+  }
 
   return (
     <div className="min-h-screen bg-bg-app">
@@ -42,8 +46,8 @@ function DashboardPage() {
             </section>
 
             <section className="grid gap-6" aria-label="Dashboard content">
-              <DashboardTable bookings={bookings} />
-              <ScheduleCalendarCard bookings={bookings} />
+              <DashboardTable bookings={bookingData} />
+              <ScheduleCalendarCard bookings={bookingData} />
             </section>
           </div>
         </main>
