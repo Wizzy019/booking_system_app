@@ -43,6 +43,7 @@
     min-height: 100vh;
     background-color: var(--bg-app);
     color: var(--text-primary);
+    position: relative;
   }
 
   *,

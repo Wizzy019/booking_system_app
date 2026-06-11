@@ -34,73 +34,64 @@ export default function LoginCard({
   const { loading } = useAuthStore();
 
   return (
-    <div
-      className="w-full rounded-3xl p-9"
-      style={{
-        maxWidth: 430,
-        background: "rgba(11, 20, 38, 0.98)",
-        border: "1px solid rgba(255,255,255,0.065)",
-        boxShadow: "0 40px 90px rgba(0,0,0,0.55)",
-      }}
-    >
+    <div className="flex flex-col rounded-[20px] p-8 md:p-10 bg-(--bg-surface) border border-(--border-default) shadow-[0_12px_40px_rgba(2,6,23,0.6)] gap-6">
       {/* BRAND */}
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-4">
         <LogoMark />
-        <span className="text-white font-semibold text-[15px] tracking-wide">
+        <span className="text-[15px] font-semibold tracking-wide text-(--text-primary)">
           Business logo
         </span>
       </div>
 
       {/* HEADER */}
-      <div className="mb-7">
-        <h1
-          className="text-white font-bold tracking-tight leading-tight mb-2.5"
-          style={{ fontSize: 30 }}
-        >
+      <div className="mb-6">
+        <h1 className="text-2xl md:text-3xl text-(--text-primary) font-extrabold tracking-tight leading-tight mb-2">
           Welcome Back
         </h1>
-        <p className="text-slate-400 text-sm leading-relaxed">
+
+        <p className="text-sm text-(--text-secondary) leading-relaxed">
           Sign in to manage bookings and appointments
         </p>
       </div>
 
       {/* FORM */}
-      <form onSubmit={onSubmit} noValidate className="space-y-3.5">
-        {/* EMAIL */}
-        <InputField
-          id="email"
-          type="email"
-          placeholder="you@business.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          leftIcon={<IconMail />}
-          autoComplete="email"
-        />
+      <form onSubmit={onSubmit} noValidate className="space-y-5">
+        {/* INPUTS */}
+        <div className="space-y-4">
+          <InputField
+            id="email"
+            type="email"
+            placeholder="you@business.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            leftIcon={<IconMail />}
+            autoComplete="email"
+          />
 
-        {/* PASSWORD */}
-        <InputField
-          id="password"
-          type={showPassword ? "text" : "password"}
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          leftIcon={<IconLock />}
-          autoComplete="current-password"
-          rightElement={
-            <button
-              type="button"
-              onClick={() => setShowPassword((p) => !p)}
-              className="text-slate-500 hover:text-slate-300 transition-colors p-0.5"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? <IconEye /> : <IconEyeOff />}
-            </button>
-          }
-        />
+          <InputField
+            id="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            leftIcon={<IconLock />}
+            autoComplete="current-password"
+            rightElement={
+              <button
+                type="button"
+                onClick={() => setShowPassword((p) => !p)}
+                className="p-0.5 text-slate-500 transition-colors hover:text-slate-300"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <IconEye /> : <IconEyeOff />}
+              </button>
+            }
+          />
+        </div>
 
         {/* REMEMBER + FORGOT */}
-        <div className="flex items-center justify-between pt-0.5">
-          <label className="flex items-center gap-2.5 cursor-pointer select-none group">
+        <div className="flex items-center justify-between pt-2">
+          <label className="group flex items-center gap-3 cursor-pointer select-none">
             <input
               type="checkbox"
               className="sr-only"
@@ -109,13 +100,11 @@ export default function LoginCard({
             />
 
             <div
-              className="w-4 h-4 rounded flex items-center justify-center transition-all duration-150"
-              style={{
-                background: rememberMe ? "#2563eb" : "transparent",
-                border: ` 1.5px solid ${
-                  rememberMe ? "#2563eb" : "rgba(70,100,155,0.6)"
-                }`,
-              }}
+              className={`flex h-4 w-4 items-center justify-center rounded-md transition-all duration-150 shadow-sm ${
+                rememberMe
+                  ? "border-(--primary) bg-(--primary)"
+                  : "border-(--border-default) bg-transparent"
+              }`}
             >
               {rememberMe && (
                 <svg width="9" height="7" viewBox="0 0 9 7" fill="none">
@@ -129,7 +118,8 @@ export default function LoginCard({
                 </svg>
               )}
             </div>
-            <span className="text-slate-400 text-sm group-hover:text-slate-300 transition-colors">
+
+            <span className="text-sm text-(--text-secondary) transition-colors group-hover:text-(--text-primary)">
               Remember me
             </span>
           </label>
@@ -137,7 +127,7 @@ export default function LoginCard({
           <button
             type="button"
             onClick={onForgotPassword}
-            className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+            className="text-sm font-medium text-(--primary) transition-colors hover:text-(--primary-hover)"
           >
             Forgot password?
           </button>
@@ -146,27 +136,20 @@ export default function LoginCard({
         {/* CTA */}
         <button
           type="submit"
-          className="w-full py-3.5 rounded-xl text-white font-semibold text-sm tracking-wide transition-all duration-200 active:scale-[0.985]"
-          style={{
-            background: "linear-gradient(135deg, #2563eb 0%, #1a4fd8 100%)",
-            boxShadow: "0 4px 22px rgba(37,99,235,0.42)",
-          }}
+          className="h-12 w-full rounded-lg bg-(--primary) hover:bg-(--primary-hover) text-sm font-semibold tracking-wide
+           text-white transition-transform duration-150 active:scale-[0.985] shadow-sm hover:shadow-md"
         >
           {loading ? "Loggng in ..." : "Primary Login"}
         </button>
       </form>
 
       {/* DIVIDER */}
-      <div
-        className="my-6"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-      />
-
+      <div className="my-8 border-t border-[rgba(255,255,255,0.06)]" />
       {/* SECONDARY ACTION */}
       <button
         type="button"
         onClick={onSecureAccess}
-        className="w-full text-center text-slate-500 hover:text-slate-400 text-xs transition-colors"
+        className="w-full text-center text-xs text-(--text-secondary) transition-colors hover:text-(--text-primary)"
       >
         Secure business access (optional)
       </button>

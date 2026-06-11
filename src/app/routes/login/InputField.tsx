@@ -22,8 +22,8 @@ export default function InputField({
   autoComplete,
 }: InputFieldProps) {
   return (
-    <div className="relative flex items-center">
-      <span className="absolute left-4 z-10 flex items-center pointer-events-none">
+    <div className="relative flex items-center w-full">
+      <span className="absolute left-4 z-10 flex items-center pointer-events-none text-(--text-secondary)">
         {leftIcon}
       </span>
 
@@ -34,11 +34,11 @@ export default function InputField({
         value={value}
         onChange={onChange}
         autoComplete={autoComplete}
-        className="w-full rounded-xl py-3.5 pl-11 pr-12 text-sm text-white placeholder-slate-600 outline-none"
+        className="w-full h-14 rounded-lg md:rounded-xl pl-12 pr-12 text-sm text-(--text-primary) placeholder:text-(--text-secondary) bg-transparent border border-(--border-default) transition-all duration-150 focus:border-(--primary) focus:border-[1.5px] focus:ring-2 focus:ring-(--primary-soft) outline-none"
       />
 
       {rightElement && (
-        <span className="absolute right-4 z-10 flex items-center">
+        <span className="absolute right-4 z-10 flex items-center text-(--text-secondary)">
           {rightElement}
         </span>
       )}

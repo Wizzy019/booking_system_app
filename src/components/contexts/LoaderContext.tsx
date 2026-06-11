@@ -22,7 +22,7 @@ export function LoaderProvider({ children }: { children: React.ReactNode }) {
       {/* GLOBAL OVERLAY */}
       {loading && (
         <div>
-          <FintechLoader />
+          <FintechLoader isLoading={loading} />
         </div>
       )}
     </LoaderContext.Provider>

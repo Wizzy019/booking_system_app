@@ -18,10 +18,11 @@ function Navbar({
   const [isFocused, setIsFocused] = useState(false);
 
   const { user } = useAuthStore();
-
   console.log(user);
 
-  const email = user?.email;
+  const full_name = `${user?.first_name} ${user?.last_name}`;
+  const avater = user?.avater;
+
   const role = user?.role;
 
   return (
@@ -80,13 +81,21 @@ function Navbar({
           >
             {/* Avatar */}
             <div className="w-8 h-8 rounded-full bg-(--primary-soft) border border-(--primary) flex items-center justify-center">
-              <User className="w-4 h-4 text-(--primary)" />
+              {avater === null ? (
+                <User className="w-4 h-4 text-(--primary)" />
+              ) : (
+                <img
+                  src={avater}
+                  alt={full_name}
+                  className="size-7 rounded-full object-cover"
+                />
+              )}
             </div>
 
             {/* Profile Info - Desktop Only */}
             <div className="hidden md:flex flex-col items-start gap-0.5 min-w-0">
               <span className="text-xs font-semibold text-(--text-primary) truncate">
-                {email}
+                {full_name}
               </span>
               <span className="text-xs text-(--text-muted) truncate">
                 {role}

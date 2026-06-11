@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
 import Logo from "../../assets/logo.svg";
+
+interface FinterLoaderProps {
+  isLoading: boolean;
+}
 // ─────────────────────────────────────────────────────────────
 //  TYPES
 // ─────────────────────────────────────────────────────────────
@@ -188,11 +192,44 @@ function drawParticles(
 // ─────────────────────────────────────────────────────────────
 //  MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────
-export default function FintechLoader(): React.ReactElement {
+export default function FintechLoader({
+  isLoading,
+}: FinterLoaderProps): React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
+
+  // Lock document scroll while loader is active — use a ref-counted approach
+  // so multiple loaders (or mounts) don't stomp each other's state.
+  useEffect(() => {
+    const body = document.body;
+    const COUNT_KEY = "fintechLoaderCount";
+    const PREV_KEY = "fintechLoaderPrevOverflow";
+    let didLock = false;
+
+    if (isLoading) {
+      const count = Number(body.dataset[COUNT_KEY] || 0);
+      if (count === 0) {
+        body.dataset[PREV_KEY] = body.style.overflow || "";
+        body.style.overflow = "hidden";
+      }
+      body.dataset[COUNT_KEY] = String(count + 1);
+      didLock = true;
+    }
+
+    return () => {
+      if (!didLock) return;
+      const count = Number(body.dataset[COUNT_KEY] || 0);
+      if (count <= 1) {
+        body.style.overflow = body.dataset[PREV_KEY] ?? "";
+        delete body.dataset[PREV_KEY];
+        delete body.dataset[COUNT_KEY];
+      } else {
+        body.dataset[COUNT_KEY] = String(count - 1);
+      }
+    };
+  }, [isLoading]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -255,7 +292,7 @@ export default function FintechLoader(): React.ReactElement {
         }
 
         case "rebuild": {
-          lScale = lrp(0.04, 1, eo(t));
+          lScale = 1;
           lAlpha = lrp(0, 1, eo(t));
           break;
         }
@@ -281,36 +318,33 @@ export default function FintechLoader(): React.ReactElement {
     <>
       {/* ── Fonts + reset ─────────────────────────────────── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
+        // @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { overflow: hidden; }
         @keyframes sonar {
           0%,100% { opacity: 0.28; transform: scale(1);    }
           50%      { opacity: 0.90; transform: scale(1.38); }
         }
       `}</style>
 
-      {/* ── Background page (blurred by overlay) ─────────── */}
-
       {/* ── Glassmorphism loader overlay ──────────────────── */}
       <div
-        className="fixed inset-0 flex flex-col items-center justify-center z-50 pointer-events-auto"
+        className={`fixed inset-0 flex items-center justify-center z-9999 transition-opacity duration-300 
+          ${isLoading ? "opacity-100 pointer-events-auto " : "opacity-0 pointer-events-none"}`}
         style={{
           background: "transparent",
-          overflow: "hidden",
         }}
       >
         {/* Radial inner vignette — adds subtle depth to the frosted panel */}
         <div
-          className="absolute inset-0 pointer-events-none"
-          // style={{
-          //   background:
-          //     "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 55%, rgba(210,225,248,0.28) 100%)",
-          // }}
+          className="fixed inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 55%, rgba(210,225,248,0.28) 100%)",
+          }}
         />
 
         {/* ── Animation stage ────────────────────────────── */}
-        <div className="relative shrink-0" style={{ width: 280, height: 280 }}>
+        <div className="fixed shrink-0" style={{ width: 280, height: 280 }}>
           {/* Canvas — particles (z below logo) */}
           <canvas
             ref={canvasRef}

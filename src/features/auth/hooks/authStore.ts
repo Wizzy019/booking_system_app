@@ -3,8 +3,10 @@ import api from "../../../lib/api";
 
 export type User = {
   id: string;
+  avater: string;
   email: string;
-  names: [];
+  first_name: string;
+  last_name: string;
   role?: "user" | "admin";
 };
 
@@ -13,6 +15,7 @@ type AuthState = {
   token: string | null;
   loading: boolean;
   hydrated: boolean;
+  isAuthChecked: boolean;
 
   setHydrated: (value: boolean) => void;
 
@@ -30,6 +33,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   token: null,
   loading: false,
   hydrated: false,
+  isAuthChecked: false,
   setHydrated: (value) => set({ hydrated: value }),
 
   get isAuthenticated() {
@@ -38,22 +42,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   // Restore session on app start
   hydrate: async () => {
-    // console.log("Hydrate Start");
-
     const token = localStorage.getItem("token");
-    // console.log("token:", token);
 
-    try {
-      if (token) {
-        set({ token });
+    if (token) {
+      set({ token });
+
+      try {
         await get().fetchUser();
+      } catch (err) {
+        console.log("fetch user failed", err);
+        get().logout();
       }
-    } catch (err) {
-      console.log("hydrate error:", err);
-    } finally {
-      // console.log("setting hydrate true");
-      set({ hydrated: true });
+    } else {
+      set({ user: null, token: null });
     }
+
+    set({ hydrated: true, isAuthChecked: true });
   },
 
   //  REGISTER
@@ -97,6 +101,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       await get().fetchUser();
     } catch (error) {
       console.log(error);
+      throw error;
     } finally {
       set({ loading: false });
     }
