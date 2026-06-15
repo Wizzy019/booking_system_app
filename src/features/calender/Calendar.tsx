@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CalendarHeader from "./CalendarHeader";
 import CalendarGrid from "./CalendarGrid";
-import { useAvailability } from "../../../features/booking/hooks/useAvailability";
+import { useAvailability } from "../booking/hooks/useAvailability";
 
 export interface Availability {
   id: string;

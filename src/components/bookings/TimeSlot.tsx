@@ -1,4 +1,6 @@
-import { useSlots } from "../../../features/booking/hooks/useAvailability";
+import { useSlots } from "../../features/booking/hooks/useAvailability";
+import { formatDateToString } from "../../utils/formatDateToString";
+import { timeToMinutes, minutesToTime } from "../../utils/formatTime";
 
 export interface Availability {
   id: string;
@@ -12,12 +14,13 @@ export interface AllSlots {
   booked: [];
 }
 
-function TimeSlot({ selectedDate }) {
-  const year = selectedDate?.getFullYear();
-  const month = String(selectedDate?.getMonth() + 1).padStart(2, "0");
-  const day = String(selectedDate?.getDate()).padStart(2, "0");
+export interface TimeSlotProps {
+  selectedDate: Date | null;
+  onSelectSlot: (slot: object) => void;
+}
 
-  const slotDate = `${year}-${month}-${day}`;
+function TimeSlot({ selectedDate, onSelectSlot }: TimeSlotProps) {
+  const slotDate = formatDateToString(selectedDate);
 
   const { data: slotsData } = useSlots(slotDate);
 
@@ -26,11 +29,6 @@ function TimeSlot({ selectedDate }) {
   const bookedSlots = allSlots?.booked;
 
   if (!selectedDate) return null;
-
-  function timeToMinutes(time: string) {
-    const [h, m] = time.split(":");
-    return Number(h) * 60 + Number(m);
-  }
 
   const SLOT_DURATION = 90;
 
@@ -56,17 +54,6 @@ function TimeSlot({ selectedDate }) {
     (value) => !bookedTimes.includes(value),
   );
 
-  const startBooking = () => {
-    console.log("Let's get the booking started");
-  };
-
-  function minutesToTime(minutes: number) {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-
-    return ` ${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
-  }
-
   return (
     <div className="flex flex-wrap gap-2">
       {slots?.map((slot, index) => {
@@ -74,7 +61,9 @@ function TimeSlot({ selectedDate }) {
         return (
           <button
             disabled={!isBookable}
-            onClick={startBooking}
+            onClick={() => {
+              onSelectSlot(slot);
+            }}
             key={index}
             className={`border px-4 py-2 rounded ${
               isBookable

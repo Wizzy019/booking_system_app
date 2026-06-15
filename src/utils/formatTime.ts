@@ -1,0 +1,11 @@
+export function timeToMinutes(time: string) {
+  const [h, m] = time.split(":");
+  return Number(h) * 60 + Number(m);
+}
+
+export function minutesToTime(minutes: number) {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  return ` ${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+}
