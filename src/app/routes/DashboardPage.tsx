@@ -5,7 +5,7 @@ import DashboardStatsContainer from "../../components/dashboard/DashboardStatsCo
 import DashboardTable from "../../components/dashboard/DashboardTable";
 import ScheduleCalendarCard from "../../components/dashboard/ScheduleCalenderCard";
 import { useAuthStore } from "../../features/auth/hooks/authStore";
-import { useBooking } from "../../hooks/useBooking";
+import { useBooking } from "../../features/booking/hooks/useBooking";
 
 const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: "home" },

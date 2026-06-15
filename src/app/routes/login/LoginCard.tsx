@@ -59,7 +59,7 @@ export default function LoginCard({
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         {/* ERROE */}
         {error && (
-          <div className="text-red-500 text-sm px-3 py-1  border-(--border-default) rounded-2xl text-center max-h-20 overflow-auto break-words whitespace-normal">
+          <div className="text-red-500 text-sm px-3 py-1  border-(--border-default) rounded-2xl text-center max-h-20 overflow-auto wrap-break-words whitespace-normal">
             {error}
           </div>
         )}

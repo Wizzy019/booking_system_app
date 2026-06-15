@@ -4,7 +4,8 @@
     --bg-surface: #111827;
     --bg-elevated: #1a2233;
 
-    --border-default: rgba(148, 163, 184, 0.15);
+    --border-default: rgba(28, 3, 117, 0.15);
+    --selected-border: rgb(242, 243, 255);
 
     --primary: #3b82f6;
     --primary-hover: #2563eb;

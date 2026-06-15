@@ -7,6 +7,7 @@ export default {
         "bg-surface": "var(--bg-surface)",
         "bg-elevated": "var(--bg-elevated)",
         "border-default": "var(--border-default)",
+        "selected-border": "var(--selected-border)",
         primary: "var(--primary)",
         "primary-hover": "var(--primary-hover)",
         "primary-soft": "var(--primary-soft)",
