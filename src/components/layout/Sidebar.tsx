@@ -34,7 +34,7 @@ interface SidebarProps {
 }
 
 function Sidebar({
-  brandName = "WBS",
+  brandName = "Apex Consulting",
   logo,
   navItems,
   isOpen,
@@ -45,8 +45,7 @@ function Sidebar({
 
   const content = (
     <aside
-      className={`flex h-full w-72 flex-col bg-(--bg-surface) border-r border-border-default md:h-screen md:fixed md:left-0 md:top-0=\
-    `}
+      className={`flex h-full w-72 flex-col bg-(--bg-surface) border-r border-border-default md:fixed md:left-0 md:top-0 md:bottom-0 z-50`}
     >
       <div className="flex flex-col gap-2 border-b border-border-default px-4 py-5">
         <div className="flex items-center gap-3">
@@ -76,7 +75,7 @@ function Sidebar({
                       isActive
                         ? "bg-primary-soft text-primary border-primary"
                         : "text-text-secondary hover:bg-bg-elevated"
-                    }`
+                    } cursor-pointer`
                   }
                   onClick={onClose}
                 >
@@ -110,7 +109,7 @@ function Sidebar({
   return (
     <>
       <div
-        className={`absolute inset-0 bg-bg-app/70 transition-opacity duration-200 ${
+        className={`absolute inset-0 z-50 bg-bg-app/70 transition-opacity duration-200 ${
           isOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -120,7 +119,7 @@ function Sidebar({
       />
 
       <div
-        className={`fixed left-0 top-0 h-full w-72 transform transition-transform duration-200 ${
+        className={`fixed left-0 top-0 h-full w-72 z-50 transform transition-transform duration-200 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         aria-label="Sidebar drawer"

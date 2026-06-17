@@ -44,18 +44,20 @@ export default function Calendar({
 
   return (
     <div className="max-w-full">
-      <CalendarHeader
-        currentMonth={currentMonth}
-        onPrev={goPrevious}
-        onNext={goNext}
-      />
+      <div className="rounded-lg bg-bg-elevated p-4 shadow-lg border border-border-default">
+        <CalendarHeader
+          currentMonth={currentMonth}
+          onPrev={goPrevious}
+          onNext={goNext}
+        />
 
-      <CalendarGrid
-        currentMonth={currentMonth}
-        selectedDate={selectedDate}
-        onDateSelect={handleDateSelect}
-        availabilitySet={new Set(availableDays)}
-      />
+        <CalendarGrid
+          currentMonth={currentMonth}
+          selectedDate={selectedDate}
+          onDateSelect={handleDateSelect}
+          availabilitySet={new Set(availableDays)}
+        />
+      </div>
     </div>
   );
 }

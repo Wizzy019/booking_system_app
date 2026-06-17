@@ -74,7 +74,7 @@ export default function CalendarGrid({
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-7 gap-1 text-xs text-(--text-secondary) mb-2">
+      <div className="grid grid-cols-7 gap-1 text-xs text-text-muted mb-2">
         {WEEKDAYS.map((w) => (
           <div key={w} className="text-center py-1 font-medium">
             {w}

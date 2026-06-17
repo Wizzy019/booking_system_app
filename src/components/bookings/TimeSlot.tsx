@@ -54,8 +54,18 @@ function TimeSlot({ selectedDate, onSelectSlot }: TimeSlotProps) {
     (value) => !bookedTimes.includes(value),
   );
 
+  if (!slots || slots.length === 0) {
+    return (
+      <div className="py-6 text-center">
+        <div className="text-sm font-medium text-text-muted">
+          No time slots available
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-1 gap-3">
       {slots?.map((slot, index) => {
         const isBookable = bookableSlots?.includes(slot.start);
         return (
@@ -65,13 +75,18 @@ function TimeSlot({ selectedDate, onSelectSlot }: TimeSlotProps) {
               onSelectSlot(slot);
             }}
             key={index}
-            className={`border px-4 py-2 rounded ${
+            className={`w-full text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between border ${
               isBookable
-                ? "text-(--text-primary) cursor-pointer"
-                : "text-(--text-muted)"
-            }`}
+                ? "bg-bg-surface text-text-primary cursor-pointer hover:bg-primary-soft"
+                : "bg-transparent text-text-muted opacity-60"
+            } focus:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            {minutesToTime(slot.start)} - {minutesToTime(slot.end)}
+            <span className="text-sm font-semibold">
+              {minutesToTime(slot.start)}
+            </span>
+            <span className="text-sm text-text-muted">
+              {minutesToTime(slot.end)}
+            </span>
           </button>
         );
       })}

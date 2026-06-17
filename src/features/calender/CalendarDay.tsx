@@ -31,16 +31,16 @@ const CalendarDay = forwardRef<HTMLButtonElement, Props>(
     const classes = [
       base,
       "text-sm font-medium",
-      isCurrentMonth ? "" : "text-(--text-secondary) opacity-60",
+      isCurrentMonth ? "text-text-primary" : "text-text-muted opacity-60",
       isAvailable ? "cursor-pointer" : "cursor-default opacity-50",
     ]
       .filter(Boolean)
       .join(" ");
 
     const selectedStyles = isSelected
-      ? "bg-(--primary) text-white shadow-sm"
+      ? "bg-primary text-white shadow-sm"
       : isToday
-        ? "text-white ring-1 ring-(--primary)"
+        ? "text-primary ring-1 ring-primary"
         : "bg-transparent";
 
     return (
@@ -53,13 +53,13 @@ const CalendarDay = forwardRef<HTMLButtonElement, Props>(
             onKeyDown={onKeyDown}
             aria-pressed={isSelected}
             aria-label={`Select ${date.toDateString()}`}
-            className={`${classes} ${selectedStyles} border ${isToday ? "border-(--border-default)" : "border-(--selected-border)"} hover:bg-[rgba(255,255,255,0.03)]`}
+            className={`${classes} ${selectedStyles} border border-border-default hover:bg-primary-soft transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary`}
           >
             <span className="pointer-events-none">{label}</span>
           </button>
         ) : (
           <div
-            className={`${classes} ${selectedStyles} border border-(--border-default)`}
+            className={`${classes} ${selectedStyles} border border-border-default`}
           >
             {label}
           </div>

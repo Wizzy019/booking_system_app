@@ -25,7 +25,7 @@ function Navbar({
   const role = user?.role;
 
   return (
-    <nav className="sticky top-0 z-40 h-18 bg-(--bg-surface) border-b border-(--border-default) backdrop-blur-sm">
+    <nav className="fixed top-0 left-0 right-0 z-40 h-16 bg-(--bg-surface) border-b border-(--border-default) backdrop-blur-sm">
       <div className="h-full px-(--space-2) sm:px-(--space-3) lg:px-(--space-4) flex items-center justify-between gap-(--space-3)">
         <div className="hidden sm:flex items-center min-w-0">
           <h1 className="text-sm font-semibold text-(--text-primary) truncate"></h1>
