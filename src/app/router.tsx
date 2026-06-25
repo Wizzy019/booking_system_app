@@ -3,8 +3,6 @@ import LoginPage from "./routes/login/LoginPage";
 import DashboardPage from "./routes/DashboardPage";
 import ProtectedRoute from "../utils/ProtectedRoute";
 import Home from "./routes/Home";
-import BookingPage from "./routes/BookingPage";
-import DashBoardLayout from "../components/layout/DashboardLayout";
 
 export const router = createHashRouter([
   {
@@ -19,17 +17,8 @@ export const router = createHashRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        element: <DashBoardLayout />,
-        children: [
-          {
-            path: "/dashboard",
-            element: <DashboardPage />,
-          },
-          {
-            path: "/bookings",
-            element: <BookingPage />,
-          },
-        ],
+        path: "/dashboard",
+        element: <DashboardPage />,
       },
     ],
   },

@@ -1,6 +1,16 @@
 import { useMemo } from "react";
+import { useBooking } from "../../features/booking/hooks/useBooking";
+import SectionHeader from "./SectionHeader";
 
-type BookingStatus = "pending" | "completed" | "canceled";
+const ChevronDownIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3">
+    <path
+      fillRule="evenodd"
+      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
 
 interface Booking {
   id: string;
@@ -11,163 +21,130 @@ interface Booking {
   status: BookingStatus;
 }
 
-interface ScheduleCalendarCardProps {
-  bookings: Booking[];
-}
+type BookingStatus = "pending" | "completed" | "canceled";
 
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WEEK_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const TIME_SLOTS = [
-  "9 AM",
-  "10 AM",
-  "11 AM",
-  "12 PM",
-  "1 PM",
-  "2 PM",
-  "3 PM",
-  "4 PM",
-  "5 PM",
-  "6 PM",
-];
+export default function ScheduleCalendarCard() {
+  const { data } = useBooking();
+  const bookings: Booking[] = data;
 
-const statusStyles: Record<BookingStatus, string> = {
-  pending: "bg-warning/10 border border-warning/20 text-warning",
-  completed: "bg-success/10 border border-success/20 text-success",
-  canceled: "bg-danger/10 border border-danger/20 text-danger",
-};
-
-function getDay(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    weekday: "short",
-  });
-}
-
-function normalizeTimeSlot(time: string): string {
-  const hour = Number(time.split(":")[0]);
-
-  if (hour === 0) return "12 AM";
-  if (hour < 12) return `${hour} AM`;
-  if (hour === 12) return "12 PM";
-
-  return `${hour - 12} PM`;
-}
-
-function BookingBlock({ booking }: { booking: Booking }) {
-  return (
-    <div
-      className={`rounded-md px-2 py-2 text-xs transition-all duration-200 ${statusStyles[booking.status]}`}
-    >
-      <p className="font-semibold text-text-primary truncate">{booking.name}</p>
-
-      <p className="text-[11px] opacity-90 truncate">{booking.service}</p>
-    </div>
-  );
-}
-
-export default function ScheduleCalendarCard({
-  bookings,
-}: ScheduleCalendarCardProps) {
-  const bookingMap = useMemo(() => {
-    const map: Record<string, Record<string, Booking[]>> = {};
+  const bookingsByDate = useMemo(() => {
+    const map: Record<string, Booking[]> = {};
 
     bookings?.forEach((booking) => {
-      const day = getDay(booking.date);
-      const slot = normalizeTimeSlot(booking.time_slot);
+      const dateKey = booking.date;
 
-      if (!map[day]) {
-        map[day] = {};
+      if (!map[dateKey]) {
+        map[dateKey] = [];
       }
 
-      if (!map[day][slot]) {
-        map[day][slot] = [];
-      }
-
-      map[day][slot].push(booking);
+      map[dateKey].push(booking);
     });
 
     return map;
   }, [bookings]);
 
+  const calenderDays = useMemo(() => {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = today.getMonth();
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+
+    const daysInMonth = lastDay.getDate();
+
+    const startOffset = firstDay.getDay();
+
+    const days = [];
+
+    for (let i = startOffset - 1; i >= 0; i--) {
+      const date = new Date(year, month, -i);
+
+      days.push({
+        date,
+        currentMonth: false,
+      });
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+
+      const dateKey = date.toISOString().split("T")[0];
+
+      days.push({
+        date,
+        currentMonth: true,
+        hasBooking: !!bookingsByDate[dateKey],
+        bookingsCount: bookingsByDate[dateKey]?.length ?? 0,
+        isToday: date.toISOString() === today.toDateString(),
+      });
+    }
+
+    return days;
+  }, [bookingsByDate]);
+
   return (
-    <section className="bg-bg-surface border border-border-default rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-3 border-b border-border-default">
-        <div>
-          <h2 className="text-sm font-semibold text-text-primary">
-            Weekly Schedule
-          </h2>
-
-          <p className="text-xs text-text-muted">Booking overview</p>
-        </div>
-
-        <div className="flex items-center gap-3 text-xs">
-          <span className="flex items-center gap-1 text-text-muted">
-            <span className="w-2 h-2 rounded-full bg-warning" />
-            Pending
-          </span>
-
-          <span className="flex items-center gap-1 text-text-muted">
-            <span className="w-2 h-2 rounded-full bg-success" />
-            Completed
-          </span>
-
-          <span className="flex items-center gap-1 text-text-muted">
-            <span className="w-2 h-2 rounded-full bg-danger" />
-            Canceled
-          </span>
-        </div>
+    <div className="bg-(--bg-surface) border border-(--border-default) rounded-lg shadow-subtle overflow-hidden">
+      {/* Header */}
+      <div className="px-5 py-4 border-b border-(--border-default)">
+        <SectionHeader
+          title="Dashboard Overview"
+          right={
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-(--primary)" />
+                <span className="text-(--text-muted) text-xs">
+                  Upcoming Consultations
+                </span>
+              </div>
+              <button
+                className="inline-flex items-center gap-1.5 rounded-md border 
+              border-(--border-default) px-3 py-1.5 text-xs font-medium text-(--text-primary)"
+              >
+                Month 2023
+                <ChevronDownIcon />
+              </button>
+            </div>
+          }
+        />
       </div>
 
-      <div className="overflow-x-auto">
-        <div className="min-w-180">
-          <div
-            className="grid border-b border-border-default"
-            style={{
-              gridTemplateColumns: "72px repeat(7, 1fr)",
-            }}
-          >
-            <div />
-
-            {DAYS.map((day) => (
-              <div
-                key={day}
-                className="px-2 py-2 text-center text-xs font-semibold text-text-secondary border-l border-border-default"
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {TIME_SLOTS.map((slot) => (
+      {/* Calendar grid */}
+      <div className="px-5 pt-3 pb-4">
+        <div className="grid grid-cols-7 text-center">
+          {WEEK_DAYS.map((d) => (
             <div
-              key={slot}
-              className="grid border-b border-border-default"
-              style={{
-                gridTemplateColumns: "72px repeat(7, 1fr)",
-              }}
+              key={d}
+              className="py-2 text-xs font-semibold text-(--text-muted)"
             >
-              <div className="px-2 py-3 text-xs text-text-muted border-r border-border-default">
-                {slot}
-              </div>
-
-              {DAYS.map((day) => {
-                const cellBookings = bookingMap[day]?.[slot] ?? [];
-
-                return (
-                  <div
-                    key={`${day}-${slot}`}
-                    className="min-h-16 p-2 border-r border-border-default bg-bg-surface hover:bg-bg-elevated transition-all duration-200 flex flex-col gap-2"
-                  >
-                    {cellBookings.map((booking) => (
-                      <BookingBlock key={booking.id} booking={booking} />
-                    ))}
-                  </div>
-                );
-              })}
+              {d}
+            </div>
+          ))}
+          {calenderDays.map((day, i) => (
+            <div key={i} className="flex flex-col items-center py-1">
+              <button
+                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
+                  day.isToday
+                    ? "bg-(--primary) text-white font-semibold"
+                    : day.currentMonth
+                      ? "text-(--text-primary) hover:bg-(--bg-elevated)"
+                      : "text-(--text-muted)"
+                }}
+              >
+                {d.n}
+              </button>
+              <span
+                className={h-1 w-1 mt-0.5 rounded-full ${
+                  day.hasBooking ? "bg-(--primary)" : "invisible"
+                }`}
+              />
             </div>
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,110 +1,98 @@
-import { useState } from "react";
-import { Search, Bell, Menu, User, X } from "lucide-react";
-import { useAuthStore } from "../../features/auth/hooks/authStore";
+import { useAuthStore, type User } from "../../features/auth/hooks/authStore";
 
-interface NavbarProps {
-  onProfileClick?: () => void;
-  onMenuClick?: () => void;
-  onNotificationClick?: () => void;
-  isSidebarOpen?: boolean;
-}
+const SearchIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+    <path
+      fillRule="evenodd"
+      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
 
-function Navbar({
-  onProfileClick,
-  onMenuClick,
-  onNotificationClick,
-  isSidebarOpen,
-}: NavbarProps) {
-  const [isFocused, setIsFocused] = useState(false);
+const BellIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+  </svg>
+);
 
-  const { user } = useAuthStore();
+const UserIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+    <path
+      fillRule="evenodd"
+      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
 
-  const full_name = `${user?.first_name} ${user?.last_name}`;
-  const avater = user?.avater;
+const ChevronDownIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="sixe-8">
+    <path
+      fillRule="evenodd"
+      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
 
-  const role = user?.role;
+export default function Navbar() {
+  const { user: userData } = useAuthStore();
+
+  const user: User = userData;
+
+  const name = `${user.first_name} ${user.last_name}`;
+  const role = user.role?.charAt(0).toUpperCase() + user.role.slice(1);
+  const avater = user.avater;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 h-16 bg-(--bg-surface) border-b border-(--border-default) backdrop-blur-sm">
-      <div className="h-full px-(--space-2) sm:px-(--space-3) lg:px-(--space-4) flex items-center justify-between gap-(--space-3)">
-        <div className="hidden sm:flex items-center min-w-0">
-          <h1 className="text-sm font-semibold text-(--text-primary) truncate"></h1>
+    <header className="flex items-center justify-between  px-6 shrink-0 bg-(--bg-surface) border-b border-(--border-default)">
+      <h1 className="text-(--text-primary) text-base font-bold">Dashboard</h1>
+
+      <div className="flex items-center gap-3 lg:gap-4">
+        {/* Search */}
+        <div className="relative hidden md:block">
+          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-(--text-muted) pointer-events-none">
+            <SearchIcon />
+          </span>
+          <input
+            type="search"
+            placeholder="Search"
+            className="h-9 w-48 lg:w-56 rounded-md border border-(--border-default) bg-(--bg-elevated) pl-8 pr-3 text-sm text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none focus:border-(--selected-border)"
+          />
         </div>
-        {/* Menu Button */}
-        <button
-          onClick={onMenuClick}
-          aria-label="Menu"
-          className="p-2 rounded-sm text-(--text-secondary) hover:bg-(--bg-elevated) transition-all duration-200 md:hidden"
-        >
-          {isSidebarOpen ? (
-            <X className="w-5 h-5" />
-          ) : (
-            <Menu className="w-5 h-5" />
-          )}
+
+        {/* Bell */}
+        <button className="relative p-1 text-(--text-muted) hover:text-(--text-primary) transition-colors">
+          <BellIcon />
+          <span className="absolute top-0 right-0 h-3.5 rounded-full bg-(--danger) border-2 border-(--bg-surface) flex items-center justify-center text-[9px] text-white font-bold leading-none">
+            1
+          </span>
         </button>
-        {/* CENTER: Search Bar */}
-        <div className="flex-1 max-w-lg">
-          <div
-            className={`relative h-9 rounded-md bg-(--bg-elevated) border transition-all duration-200 ${
-              isFocused
-                ? "border-(--primary) shadow-lg"
-                : "border-(--border-default)"
-            }`}
-          >
-            <input
-              type="text"
-              placeholder="Search..."
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              className="w-full h-full px-3 pl-9 text-sm bg-transparent text-(--text-primary) placeholder-(--text-muted) outline-none"
-            />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-(--text-secondary)" />
-          </div>
-        </div>
-        {/* RIGHT: Actions & Profile */}
-        <div className="flex items-center gap-(--space-2)">
-          {/* Notification Icon */}
-          <button
-            onClick={onNotificationClick}
-            aria-label="Notifications"
-            className="p-2 rounded-sm text-(--text-secondary) hover:bg-(--bg-elevated) transition-all duration-200 cursor-pointer"
-          >
-            <Bell className="w-5 h-5" />
-          </button>
 
-          {/* User Profile */}
-          <button
-            onClick={onProfileClick}
-            aria-label="Profile"
-            className="flex items-center gap-2 px-2 py-1 rounded-sm hover:bg-(--bg-elevated) transition-all duration-200"
-          >
-            {/* Avatar */}
-            <div className="w-8 h-8 rounded-full bg-(--primary-soft) border border-(--primary) flex items-center justify-center">
-              {avater === null ? (
-                <User className="w-4 h-4 text-(--primary)" />
+        {/* User */}
+        <div className="flex items-center gap-2 cursor-pointer">
+          <div className="px-2 rounded-3xl bg-(--primary-soft) flex flex-col items-center justify-center shrink-0 text-primary">
+            <div className="flex items-center justify-center gap-2">
+              {avater ? (
+                <div>
+                  <img src={avater} className="size-10 rounded-full mt-2" />
+                </div>
               ) : (
-                <img
-                  src={avater}
-                  alt={full_name}
-                  className="size-7 rounded-full object-cover"
-                />
+                <UserIcon />
               )}
+              <span className="text-text-primary">{name}</span>
             </div>
-
-            {/* Profile Info - Desktop Only */}
-            <div className="hidden md:flex flex-col items-start gap-0.5 min-w-0">
-              <span className="text-xs font-semibold text-(--text-primary) truncate">
-                {full_name}
-              </span>
-              <span className="text-xs text-(--text-muted) truncate">
-                {role}
-              </span>
-            </div>
-          </button>
+            <span className="mb-1 text-text-secondary">{role}</span>
+          </div>
+          <span className="hidden sm:block text-sm font-medium text-(--text-primary) whitespace-nowrap">
+            Today2023
+          </span>
+          <span className="text-(--text-muted)">
+            <ChevronDownIcon />
+          </span>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
-
-export default Navbar;

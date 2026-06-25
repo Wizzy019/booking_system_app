@@ -1,38 +1,19 @@
-import { useState } from "react";
-import Navbar from "./Navbar";
+import React from "react";
 import Sidebar from "./Sidebar";
-// import DashboardStatsContainer from "../../components/dashboard/DashboardStatsContainer";
-// import DashboardTable from "../../components/dashboard/DashboardTable";
-// import ScheduleCalendarCard from "../../components/dashboard/ScheduleCalenderCard";
-import { useAuthStore } from "../../features/auth/hooks/authStore";
-import DashboardPage from "../../app/routes/DashboardPage";
-const navItems = [
-  { label: "Dashboard", to: "/dashboard", icon: "home" },
-  { label: "Bookings", to: "/bookings", icon: "calendar" },
-  { label: "Analytics", to: "/analytics", icon: "chart" },
-  { label: "Settings", to: "/settings", icon: "settings" },
-];
+import Navbar from "./Navbar";
 
-function DashBoardLayout() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const { logout } = useAuthStore();
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+}
 
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="min-h-screen bg-bg-app overflow-y-auto">
-      <header className="w-full">
-        <Navbar
-          isSidebarOpen={isSidebarOpen}
-          onMenuClick={() => setSidebarOpen((prev) => !prev)}
-        />
-      </header>
-      <aside>
-        <Sidebar navItems={navItems} isOpen={isSidebarOpen} onLogout={logout} />
-      </aside>
-      <main className="flex-1 md:ml-72 pt-16">
-        <DashboardPage />
-      </main>
+    <div className="flex h-screen overflow-hidden font-sans bg-(--bg-app)">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <Navbar />
+        <main className="flex-1 overflow-y-auto p-5 lg:p-6">{children}</main>
+      </div>
     </div>
   );
 }
-
-export default DashBoardLayout;

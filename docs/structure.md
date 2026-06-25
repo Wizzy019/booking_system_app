@@ -98,3 +98,29 @@ src/
 │ └── useLocalStorage.ts
 │
 └── main.tsx
+
+src
+│
+├── pages
+│ └── DashboardPage.tsx
+│
+├── layouts
+│ └── DashboardLayout.tsx
+│
+├── components
+│ └── dashboard
+│ ├── Sidebar.tsx
+│ ├── Navbar.tsx
+│ ├── StatCards.tsx
+│ ├── DashboardTable.tsx
+│ ├── ScheduleCalendarCard.tsx
+│ ├── AvailabilityCard.tsx
+│ ├── UpcomingConsultationCard.tsx
+│ └── SectionHeader.tsx
+│
+├── features
+│ ├── bookings
+│ ├── availability
+│ └── dashboard
+│
+└── services

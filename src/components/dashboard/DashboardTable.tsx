@@ -1,94 +1,137 @@
-export type Booking = {
+import { useBooking } from "../../features/booking/hooks/useBooking";
+import SectionHeader from "./SectionHeader";
+
+interface Booking {
   id: string;
   name: string;
   email: string;
   date: string;
   time_slot: string;
-  status: "pending" | "completed" | "canceled";
-  created_at: string;
+  status: BookingStatus;
+}
+
+const EyeIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+    <path
+      fillRule="evenodd"
+      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const PencilIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+  </svg>
+);
+
+const TrashIcon = () => (
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+    <path
+      fillRule="evenodd"
+      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+type BookingStatus = "pending" | "completed" | "canceled";
+
+const STATUS_MAP: Record<BookingStatus, { label: string; cls: string }> = {
+  pending: { label: "Pending", cls: "text-primary bg-primary-soft" },
+  completed: { label: "Completed", cls: "text-success  bg-success/15" },
+  canceled: { label: "Canceled", cls: "text-danger bg-danger/15" },
 };
 
-type Props = {
-  bookings: Booking[];
-};
-
-const STATUS_STYLES: Record<Booking["status"], string> = {
-  pending: "bg-(--warning)/10 text-(--warning) ring-1 ring-(--warning)/30",
-  completed: "bg-(--success)/10 text-(--success) ring-1 ring-(--success)/30",
-  canceled: "bg-(--danger)/10  text-(--danger)  ring-1 ring-(--danger)/30",
-};
-
-const STATUS_LABEL: Record<Booking["status"], string> = {
-  pending: "Pending",
-  completed: "Completed",
-  canceled: "Canceled",
-};
-
-function StatusBadge({ status }: { status: Booking["status"] }) {
+function StatusBadge({ status }: { status: BookingStatus }) {
+  const { label, cls } = STATUS_MAP[status];
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium tracking-wide ${STATUS_STYLES[status]}`}
+      className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${cls}`}
     >
-      {STATUS_LABEL[status]}
+      {label}
     </span>
   );
 }
 
-function DashboardTable({ bookings }: Props) {
-  return (
-    <div className="rounded-lg border border-(--border-default) bg-(--surface) overflow-hidden">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-(--border-first)">
-            {["Client", "Email", "Date", "Time", "Status"].map((col) => (
-              <th
-                key={col}
-                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-(--text-muted) first:pl-5 last:pr-5"
-              >
-                {col}
-              </th>
-            ))}
-          </tr>
-        </thead>
+export default function DashboardTable() {
+  const { data } = useBooking();
 
-        <tbody>
-          {bookings?.length === 0 ? (
-            <tr>
-              <td
-                colSpan={5}
-                className="px-5 py-12 text-center text-(--text-muted) text-sm"
-              >
-                No bookings found.
-              </td>
+  const bookings: Booking[] = data;
+  const bookingKeys = bookings?.length ? Object.keys(bookings[0]) : [];
+  const headers = bookingKeys?.slice(1);
+
+  const handleEdit = (id) => {
+    console.log(id);
+  };
+
+  return (
+    <div className="bg-(--bg-surface) border border-(--border-default) rounded-lg shadow-subtle overflow-hidden">
+      <div className="px-5 py-4 border-b border-(--border-default)">
+        <SectionHeader title="Client Bookings Table" />
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-160">
+          <thead>
+            <tr className="border-b border-(--border-default) bg-(--bg-elevated)">
+              {headers?.map((header) => (
+                <th
+                  key={header}
+                  className="px-4 py-3 text-left text-xs font-semibold text-(--text-muted) whitespace-nowrap"
+                >
+                  {header?.charAt(0).toUpperCase() + header.slice(1)}
+                </th>
+              ))}
             </tr>
-          ) : (
-            bookings?.map((booking) => (
+          </thead>
+          <tbody className="divide-y divide-(--border-default)">
+            {bookings?.map((booking) => (
               <tr
                 key={booking.id}
-                className="border-b border-(--border-first) last:border-0 transition-all duration-200 hover:bg-(--surface-hover)"
+                className="hover:bg-(--bg-app) transition-colors"
               >
-                <td className="px-4 pl-5 py-3.5 font-medium text-(--text-primary) whitespace-nowrap">
+                {/* <td className="px-4 py-3 text-xs font-semibold text-(--text-primary)">
+                  {booking.id}
+                </td> */}
+                <td className="px-4 py-3 text-xs font-semibold text-(--text-primary)">
                   {booking.name}
                 </td>
-                <td className="px-4 py-3.5 text-(--text-secondary) whitespace-nowrap">
+                <td className="px-4 py-3 text-xs text-(--text-secondary)">
                   {booking.email}
                 </td>
-                <td className="px-4 py-3.5 text-(--text-secondary) whitespace-nowrap">
+                <td className="px-4 py-3 text-xs text-(--text-secondary) whitespace-nowrap">
                   {booking.date}
                 </td>
-                <td className="px-4 py-3.5 text-(--text-secondary) whitespace-nowrap">
-                  {booking.time_slot}
+                <td className="px-4 py-3 text-xs text-(--text-secondary)">
+                  {booking.time_slot.split(":")[0]}
                 </td>
-                <td className="px-4 pr-5 py-3.5">
-                  <StatusBadge status={booking.status} />
+                <td className="px-4 py-3">
+                  <StatusBadge status={booking?.status} />
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={handleEdit}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-(--text-secondary) border border-(--border-default) rounded hover:bg-(--bg-app) transition-colors"
+                    >
+                      <EyeIcon /> View
+                    </button>
+                    <button className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-(--text-secondary) border border-(--border-default) rounded hover:bg-(--bg-app) transition-colors">
+                      <PencilIcon /> Edit
+                    </button>
+                    <button className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-(--danger) border border-(--border-default) rounded hover:bg-(--danger)/10 transition-colors">
+                      <TrashIcon /> Delete
+                    </button>
+                  </div>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
-
-export default DashboardTable;

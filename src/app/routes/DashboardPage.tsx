@@ -1,43 +1,43 @@
-// import { useState } from "react";
-// import Navbar from "../../components/layout/Navbar";
-// import Sidebar from "../../components/layout/Sidebar";
-import DashboardStatsContainer from "../../components/dashboard/DashboardStatsContainer";
-import DashboardTable from "../../components/dashboard/DashboardTable";
+// import React from "react";
+import DashboardLayout from "../../components/layout/DashboardLayout";
+import StatCards from "../../components/dashboard/StatCards";
 import ScheduleCalendarCard from "../../components/dashboard/ScheduleCalenderCard";
-// import { useAuthStore } from "../../features/auth/hooks/authStore";
-import { useBooking } from "../../features/booking/hooks/useBooking";
+import AvailabilityCard from "../../components/dashboard/AvailabilityCard";
+import DashboardTable from "../../components/dashboard/DashboardTable";
+import { useState } from "react";
+import AvailabilityModal from "../../components/dashboard/AvailabiltyModal";
 
-function DashboardPage() {
-  // const [isSidebarOpen, setSidebarOpen] = useState(false);
-  // const { logout } = useAuthStore();
-
-  const { data: bookingData, error } = useBooking();
-  if (error) {
-    console.log(error);
-  }
+export default function DashboardPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg-app">
-      <main>
-        <div className="mx-auto min-h-screen flex max-w-7xl flex-col gap-6 px-6 py-6">
-          <header className="rounded-lg border border-(--border-default) bg-(--bg-surface) px-6 py-6 shadow-subtle">
-            <h1 className="text-3xl font-semibold text-(--text-primary)">
-              Dashboard
-            </h1>
-          </header>
+    <DashboardLayout>
+      <div className="space-y-5 lg:space-y-6">
+        {/* Stat cards */}
+        <StatCards />
 
-          <section className="grid gap-6" aria-label="Dashboard content">
-            <DashboardStatsContainer />
-          </section>
+        {/* Body: left + right */}
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-5 lg:gap-6">
+          {/* Left column */}
+          <div className="space-y-5 lg:space-y-6 min-w-0">
+            <ScheduleCalendarCard />
 
-          <section className="grid gap-6" aria-label="Dashboard content">
-            <DashboardTable bookings={bookingData} />
-            <ScheduleCalendarCard bookings={bookingData} />
-          </section>
+            <DashboardTable />
+          </div>
+
+          {/* Right column */}
+          <div className="space-y-5 lg:space-y-6">
+            {/* <TodaySchedule /> */}
+            <AvailabilityCard onOpenModal={() => setIsModalOpen(true)} />
+            <div className="space-y-5 lg:space-y-6">
+              <AvailabilityModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+              />
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }
-
-export default DashboardPage;
