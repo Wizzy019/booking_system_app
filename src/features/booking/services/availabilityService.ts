@@ -6,6 +6,11 @@ export type CreateAvailabilityPayload = {
   end_time: string;
 };
 
+export type UpdateAvailabilityPayload = {
+  start_time: string;
+  end_time: string;
+};
+
 export const getAvailability = async () => {
   const { data } = await api.get("/availability");
   return data;
@@ -24,7 +29,15 @@ export const createAvailability = async (
   return data;
 };
 
+export const updateAvailability = async (
+  id: string,
+  data: UpdateAvailabilityPayload,
+) => {
+  const res = await api.patch(`/availability/${id}`, data);
+  return res.data;
+};
+
 export const deleteAvailability = async (id: string) => {
-  const res = await api.patch(`/availability/${id}`);
+  const res = await api.delete(`/availability/${id}`);
   return res.data;
 };

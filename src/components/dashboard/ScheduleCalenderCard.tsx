@@ -45,33 +45,33 @@ export default function ScheduleCalendarCard() {
     return map;
   }, [bookings]);
 
-  const calenderDays = useMemo(() => {
-    const today = new Date();
+  const currentDate = useMemo(() => new Date(), []);
 
-    const year = today.getFullYear();
-    const month = today.getMonth();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
 
+  const monthName = currentDate.toLocaleString("default", {
+    month: "long",
+  });
+
+  const calendarDays = useMemo(() => {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
     const daysInMonth = lastDay.getDate();
-
     const startOffset = firstDay.getDay();
 
     const days = [];
 
     for (let i = startOffset - 1; i >= 0; i--) {
-      const date = new Date(year, month, -i);
-
       days.push({
-        date,
+        date: new Date(year, month, -i),
         currentMonth: false,
       });
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, month, day);
-
       const dateKey = date.toISOString().split("T")[0];
 
       days.push({
@@ -79,32 +79,36 @@ export default function ScheduleCalendarCard() {
         currentMonth: true,
         hasBooking: !!bookingsByDate[dateKey],
         bookingsCount: bookingsByDate[dateKey]?.length ?? 0,
-        isToday: date.toISOString() === today.toDateString(),
+        isToday: date.toDateString() === currentDate.toDateString(),
       });
     }
 
     return days;
-  }, [bookingsByDate]);
+  }, [bookingsByDate, month, year, currentDate]);
 
   return (
     <div className="bg-(--bg-surface) border border-(--border-default) rounded-lg shadow-subtle overflow-hidden">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-(--border-default)">
+      <div className="flex justify-between px-2 md:px-5 py-4 border-b border-(--border-default)">
         <SectionHeader
           title="Dashboard Overview"
           right={
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 shrink-0">
                 <span className="w-2 h-2 rounded-full bg-(--primary)" />
-                <span className="text-(--text-muted) text-xs">
+                <span className="text-(--text-muted) text-xs whitespace-nowrap">
                   Upcoming Consultations
                 </span>
               </div>
+              <span>
+                {" "}
+                {monthName} {year}
+              </span>
               <button
-                className="inline-flex items-center gap-1.5 rounded-md border 
-              border-(--border-default) px-3 py-1.5 text-xs font-medium text-(--text-primary)"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-md border
+            border-(--border-default) px-3 py-1.5 text-xs font-medium text-(--text-primary)"
               >
-                Month 2023
+                {}
                 <ChevronDownIcon />
               </button>
             </div>
@@ -113,36 +117,40 @@ export default function ScheduleCalendarCard() {
       </div>
 
       {/* Calendar grid */}
-      <div className="px-5 pt-3 pb-4">
-        <div className="grid grid-cols-7 text-center">
-          {WEEK_DAYS.map((d) => (
-            <div
-              key={d}
-              className="py-2 text-xs font-semibold text-(--text-muted)"
-            >
-              {d}
-            </div>
-          ))}
-          {calenderDays.map((day, i) => (
-            <div key={i} className="flex flex-col items-center py-1">
-              <button
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
-                  day.isToday
-                    ? "bg-(--primary) text-white font-semibold"
-                    : day.currentMonth
-                      ? "text-(--text-primary) hover:bg-(--bg-elevated)"
-                      : "text-(--text-muted)"
-                }}
+      <div className="overflow-x-auto">
+        <div className="min-w-105 px-5 pt-3 pb-4">
+          <div className="grid grid-cols-7 text-center">
+            {WEEK_DAYS.map((d) => (
+              <div
+                key={d}
+                className="py-2 text-xs font-semibold text-(--text-muted)"
               >
-                {d.n}
-              </button>
-              <span
-                className={h-1 w-1 mt-0.5 rounded-full ${
-                  day.hasBooking ? "bg-(--primary)" : "invisible"
-                }`}
-              />
-            </div>
-          ))}
+                {d}
+              </div>
+            ))}
+
+            {calendarDays.map((day, i) => (
+              <div key={i} className="flex flex-col items-center py-1">
+                <button
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
+                    day.isToday
+                      ? "bg-(--primary) text-white font-semibold"
+                      : day.currentMonth
+                        ? "text-(--text-primary) hover:bg-(--bg-elevated)"
+                        : "text-(--text-muted)"
+                  }`}
+                >
+                  {day.n}
+                </button>
+
+                <span
+                  className={`h-1 w-1 mt-0.5 rounded-full ${
+                    day.hasBooking ? "bg-(--primary)" : "invisible"
+                  }`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

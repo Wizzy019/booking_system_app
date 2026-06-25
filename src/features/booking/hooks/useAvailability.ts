@@ -4,7 +4,9 @@ import {
   deleteAvailability,
   getAvailability,
   getSlots,
+  updateAvailability,
   type CreateAvailabilityPayload,
+  type UpdateAvailabilityPayload,
 } from "../services/availabilityService";
 
 export const useAvailability = () => {
@@ -28,6 +30,24 @@ export const useCreateAvailability = () => {
   return useMutation({
     mutationFn: (payload: CreateAvailabilityPayload) =>
       createAvailability(payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["availability"] });
+    },
+  });
+};
+
+export const useUpdateAvailability = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: UpdateAvailabilityPayload;
+    }) => updateAvailability(id, data),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["availability"] });

@@ -1,4 +1,6 @@
 import React from "react";
+import { useBooking } from "../../features/booking/hooks/useBooking";
+import { useAvailability } from "../../features/booking/hooks/useAvailability";
 
 const ClipboardIcon = () => (
   <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
@@ -59,8 +61,8 @@ function StatCard({ icon, label, value, trend }: StatCardProps) {
           ↑{trend}
         </span>
       </div>
-      <p className="text-(--text-muted) text-xs mb-1 leading-tight">{label}</p>
-      <p className="text-(--text-primary) text-2xl font-bold tracking-tight">
+      <p className="text-text-muted text-xs mb-1 leading-tight">{label}</p>
+      <p className="text-text-primary text-2xl font-bold tracking-tight">
         {value}
       </p>
     </div>
@@ -68,12 +70,17 @@ function StatCard({ icon, label, value, trend }: StatCardProps) {
 }
 
 export default function StatCards() {
+  const { data: bookingData } = useBooking();
+  const bookings = bookingData;
+  const { data: availabilityData } = useAvailability();
+  const availability = availabilityData;
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard
         icon={<ClipboardIcon />}
         label="Total Bookings"
-        value="1768"
+        value={bookings?.length}
         trend="59%"
       />
       <StatCard
@@ -85,7 +92,7 @@ export default function StatCards() {
       <StatCard
         icon={<ClockIcon />}
         label="Available Time Slots"
-        value="366"
+        value={availability?.length}
         trend="15%"
       />
       <StatCard

@@ -1,27 +1,30 @@
 import { X } from "lucide-react";
 import { useState, type ChangeEvent } from "react";
 import { useLoader } from "../../contexts/LoaderContext";
-import { useCreateAvailability } from "../../features/booking/hooks/useAvailability";
+import { useUpdateAvailability } from "../../features/booking/hooks/useAvailability";
 import { getErrorMessage } from "../../utils/erroMessage";
+import { type Availability } from "../dashboard/AvailabilityCard";
 
-type AvailabilityModalProps = {
+type EditAvailabilityModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  availability: Availability;
 };
 
 type FormData = {
-  day_of_week: number;
   start_time: string;
   end_time: string;
 };
 
-function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
-  const [day, setDay] = useState(0);
+function EditAvailabilityModal({
+  isOpen,
+  onClose,
+  availability,
+}: EditAvailabilityModalProps) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const [formData, setFormData] = useState<FormData>({
-    day_of_week: 0,
     start_time: "",
     end_time: "",
   });
@@ -32,7 +35,7 @@ function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
   };
 
   const { hideLoader, showLoader } = useLoader();
-  const createAvailabilityMutation = useCreateAvailability();
+  const updateAvailabilityMutation = useUpdateAvailability();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,27 +49,30 @@ function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
       setError("Start Time and End Time are required");
       return;
     }
-
-    setError("");
     showLoader();
 
     const payload = {
-      day_of_week: day,
       start_time: startTime,
       end_time: endTime,
     };
 
-    createAvailabilityMutation.mutate(payload, {
-      onError: (error) => {
-        setError(getErrorMessage(error));
+    updateAvailabilityMutation.mutate(
+      { id: availability.id, data: payload },
+      {
+        onError: (error) => {
+          setError(getErrorMessage(error));
+          console.log(availability.id);
+
+          throw error;
+        },
+        onSuccess: () => {
+          setSuccess("Done");
+          console.log("Availability Edited!!!");
+          setFormData({ start_time: "", end_time: "" });
+        },
+        onSettled: hideLoader,
       },
-      onSuccess: () => {
-        setSuccess("Availability Added!!!");
-        console.log("Availability Added!!!");
-        setFormData({ day_of_week: 0, start_time: "", end_time: "" });
-      },
-      onSettled: hideLoader,
-    });
+    );
   };
 
   return (
@@ -94,23 +100,7 @@ function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="mb-1 block  text-text-secondary">Day</label>
-              <select
-                className="w-full rounded border p-2 bg-bg-elevated"
-                value={day}
-                onChange={(e) => setDay(Number(e.target.value))}
-              >
-                <option value={0}>Monday</option>
-                <option value={1}>Tuesday</option>
-                <option value={2}>Wednesday</option>
-                <option value={3}>Thursday</option>
-                <option value={4}>Friday</option>
-                <option value={5}>Saturday</option>
-                <option value={6}>Sunday</option>
-              </select>
-            </div>
-
-            <div>
+              {error} {success}
               <label className="mb-1 block text-text-secondary">
                 Start Time
               </label>
@@ -149,4 +139,4 @@ function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
   );
 }
 
-export default AvailabilityModal;
+export default EditAvailabilityModal;

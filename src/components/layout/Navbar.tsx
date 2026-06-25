@@ -40,59 +40,82 @@ export default function Navbar() {
   const { user: userData } = useAuthStore();
 
   const user: User = userData;
-
-  const name = `${user.first_name} ${user.last_name}`;
-  const role = user.role?.charAt(0).toUpperCase() + user.role.slice(1);
   const avater = user.avater;
 
   return (
-    <header className="flex items-center justify-between  px-6 shrink-0 bg-(--bg-surface) border-b border-(--border-default)">
-      <h1 className="text-(--text-primary) text-base font-bold">Dashboard</h1>
+    <>
+      <header className="hidden md:flex md:items-center md:justify-between py-2 px-6 shrink-0 bg-(--bg-surface) border-b border-(--border-default)">
+        <div className="w-full flex items-center justify-between gap-3 lg:gap-4">
+          <div>Dashboard</div>
 
-      <div className="flex items-center gap-3 lg:gap-4">
-        {/* Search */}
-        <div className="relative hidden md:block">
-          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-(--text-muted) pointer-events-none">
+          <div className="flex items-center justify-between gap-4">
+            <div className="relative hidden md:block">
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-(--text-muted) pointer-events-none">
+                <SearchIcon />
+              </span>
+              <input
+                type="search"
+                placeholder="Search"
+                className="h-9 w-48 lg:w-56 rounded-md border border-(--border-default) bg-(--bg-elevated) pl-8 pr-3 text-sm text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none focus:border-(--selected-border)"
+              />
+            </div>
+            <button className="hidden md:block relative p-1 text-(--text-muted) hover:text-(--text-primary) transition-colors">
+              <BellIcon />
+              {/* <span className="absolute top-0 right-0 h-3.5 rounded-full bg-(--danger) border-2 border-(--bg-surface) flex items-center justify-center text-[9px] text-white font-bold leading-none"></span> */}
+            </button>
+
+            {/* User */}
+            <div className="flex items-center justify-center gap-2">
+              <div>
+                {avater ? (
+                  <div className="flex items-center justify-center">
+                    <img src={avater} className="size-10 rounded-full" />
+                  </div>
+                ) : (
+                  <UserIcon />
+                )}
+              </div>
+              {/* <div>
+              <span className="hidden md:block text-text-primary">{name}</span>
+              <span className="mb-1 hidden md:block text-text-secondary">
+                {role}
+              </span>
+            </div> */}
+            </div>
+            <span className="hidden sm:block text-sm font-medium text-(--text-primary) whitespace-nowrap">
+              Today2023
+            </span>
+            {/* <span className="text-text-muted text-sm">
+            <ChevronDownIcon />
+          </span> */}
+            {/* <div className="px-2 rounded-3xl bg-bg-surface flex flex-col items-center justify-center shrink-0 text-primary">
+          </div> */}
+          </div>
+        </div>
+      </header>
+
+      <header className="md:hidden flex items-center justify-between py-2 px-4">
+        <div>
+          {avater ? (
+            <div className="flex items-center justify-center">
+              <img src={avater} className="size-10 rounded-full" />
+            </div>
+          ) : (
+            <UserIcon />
+          )}
+        </div>
+        <div className="min-w-0">
+          <p className="text-(--text-primary) font-bold text-sm leading-tight">
+            Apex
+          </p>
+          <p className="text-(--text-muted) text-[11px]">Consulting</p>
+        </div>
+        <div>
+          <span className="text-(--text-muted) pointer-events-none">
             <SearchIcon />
           </span>
-          <input
-            type="search"
-            placeholder="Search"
-            className="h-9 w-48 lg:w-56 rounded-md border border-(--border-default) bg-(--bg-elevated) pl-8 pr-3 text-sm text-(--text-primary) placeholder:text-(--text-muted) focus:outline-none focus:border-(--selected-border)"
-          />
         </div>
-
-        {/* Bell */}
-        <button className="relative p-1 text-(--text-muted) hover:text-(--text-primary) transition-colors">
-          <BellIcon />
-          <span className="absolute top-0 right-0 h-3.5 rounded-full bg-(--danger) border-2 border-(--bg-surface) flex items-center justify-center text-[9px] text-white font-bold leading-none">
-            1
-          </span>
-        </button>
-
-        {/* User */}
-        <div className="flex items-center gap-2 cursor-pointer">
-          <div className="px-2 rounded-3xl bg-(--primary-soft) flex flex-col items-center justify-center shrink-0 text-primary">
-            <div className="flex items-center justify-center gap-2">
-              {avater ? (
-                <div>
-                  <img src={avater} className="size-10 rounded-full mt-2" />
-                </div>
-              ) : (
-                <UserIcon />
-              )}
-              <span className="text-text-primary">{name}</span>
-            </div>
-            <span className="mb-1 text-text-secondary">{role}</span>
-          </div>
-          <span className="hidden sm:block text-sm font-medium text-(--text-primary) whitespace-nowrap">
-            Today2023
-          </span>
-          <span className="text-(--text-muted)">
-            <ChevronDownIcon />
-          </span>
-        </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }

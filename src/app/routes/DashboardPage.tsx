@@ -6,9 +6,15 @@ import AvailabilityCard from "../../components/dashboard/AvailabilityCard";
 import DashboardTable from "../../components/dashboard/DashboardTable";
 import { useState } from "react";
 import AvailabilityModal from "../../components/dashboard/AvailabiltyModal";
+import EditAvailabilityModal from "../../components/dashboard/EditAvailabiltyModal";
+import { type Availability } from "../../components/dashboard/AvailabilityCard";
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedAvailability, setSelectedAvailability] = useState<
+    Availability[] | null
+  >(null);
 
   return (
     <DashboardLayout>
@@ -28,11 +34,20 @@ export default function DashboardPage() {
           {/* Right column */}
           <div className="space-y-5 lg:space-y-6">
             {/* <TodaySchedule /> */}
-            <AvailabilityCard onOpenModal={() => setIsModalOpen(true)} />
+            <AvailabilityCard
+              onOpenModal={() => setIsModalOpen(true)}
+              onOpenEditModal={() => setIsEditModalOpen(true)}
+              onSelect={setSelectedAvailability}
+            />
             <div className="space-y-5 lg:space-y-6">
               <AvailabilityModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+              />
+              <EditAvailabilityModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                availability={selectedAvailability}
               />
             </div>
           </div>

@@ -29,6 +29,6 @@ export const updateBooking = async (id: string, data: updateBookingPayload) => {
 };
 
 export const deleteBooking = async (id: string) => {
-  const res = await api.patch(`/booking/${id}`);
+  const res = await api.delete(`/booking/${id}`);
   return res.data;
 };
