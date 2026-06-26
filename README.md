@@ -35,11 +35,12 @@ Backend
 
 Dashboard
 
-"Dashboard Screenshot" (./screenshots/dashboard.png)
-
+"Dashboard Screenshot"
+(./docs/screenshots/dashboard.png)
 Booking Flow
 
-"Booking Screenshot" (./screenshots/booking.png)
+"Booking Screenshot"
+(./docs/screenshots/booking_page.png)
 
 🚀 Getting Started
 
