@@ -10,7 +10,7 @@ function ProtectedRoute() {
   if (!hydrated) {
     return (
       <div>
-        <FintechLoader />
+        <FintechLoader isLoading={true} />
       </div>
     );
   }
@@ -20,7 +20,7 @@ function ProtectedRoute() {
   }
 
   if (!user) {
-    return <FintechLoader />;
+    return <FintechLoader isLoading={true} />;
   }
 
   return <Outlet />;

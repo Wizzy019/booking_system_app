@@ -31,13 +31,12 @@ export default function LoginCard({
   setRememberMe,
   onSubmit,
   onForgotPassword,
-  onSecureAccess,
 }: LoginCardProps): React.JSX.Element {
   const [showPassword, setShowPassword] = React.useState<boolean>(false);
   const { loading } = useAuthStore();
 
   return (
-    <div className="flex w-3/4 flex-col rounded-xl p-6 bg-(--bg-surface) border border-(--border-default) shadow-[0_12px_40px_rgba(2,6,23,0.6)] gap-4">
+    <div className="flex w-full min-w-3/4 flex-col rounded-xl p-4 bg-(--bg-surface) border border-(--border-default) shadow-[0_12px_40px_rgba(2,6,23,0.6)] gap-4">
       {/* BRAND */}
       <div className="flex items-center gap-2 mb-3">
         <img src={Logo} alt="logo" className="size-20" />
@@ -155,15 +154,15 @@ export default function LoginCard({
       </form>
 
       {/* DIVIDER */}
-      <div className="my-6 border-t border-[rgba(255,255,255,0.06)]" />
+      {/* <div className="my-6 border-t border-[rgba(255,255,255,0.06)]" /> */}
       {/* SECONDARY ACTION */}
-      <button
+      {/* <button
         type="button"
         onClick={onSecureAccess}
         className="w-full text-center text-xs text-(--text-secondary) transition-colors hover:text-(--text-primary)"
       >
         Secure business access (optional)
-      </button>
+      </button> */}
     </div>
   );
 }

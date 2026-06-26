@@ -26,21 +26,21 @@ const UserIcon = () => (
   </svg>
 );
 
-const ChevronDownIcon = () => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className="sixe-8">
-    <path
-      fillRule="evenodd"
-      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
+// const ChevronDownIcon = () => (
+//   <svg viewBox="0 0 20 20" fill="currentColor" className="sixe-8">
+//     <path
+//       fillRule="evenodd"
+//       d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+//       clipRule="evenodd"
+//     />
+//   </svg>
+// );
 
 export default function Navbar() {
   const { user: userData } = useAuthStore();
 
-  const user: User = userData;
-  const avater = user.avater;
+  const user: User | null = userData;
+  const avater = user?.avater;
 
   return (
     <>

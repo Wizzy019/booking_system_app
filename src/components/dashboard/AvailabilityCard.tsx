@@ -23,7 +23,7 @@ export interface Availability {
 type AvailabilityCardProps = {
   onOpenModal: () => void;
   onOpenEditModal: () => void;
-  onSelect: (availability: Availability[]) => void;
+  onSelect: (availability: Availability) => void;
 };
 
 export default function AvailabilityCard({

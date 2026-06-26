@@ -63,10 +63,6 @@ export default function DashboardTable() {
   const bookingKeys = bookings?.length ? Object.keys(bookings[0]) : [];
   const headers = bookingKeys?.slice(1);
 
-  const handleEdit = (id) => {
-    console.log(id);
-  };
-
   return (
     <div className="bg-(--bg-surface) border border-(--border-default) rounded-lg shadow-subtle overflow-hidden">
       <div className="px-5 py-4 border-b border-(--border-default)">
@@ -113,10 +109,7 @@ export default function DashboardTable() {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={handleEdit}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-(--text-secondary) border border-(--border-default) rounded hover:bg-(--bg-app) transition-colors"
-                    >
+                    <button className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-(--text-secondary) border border-(--border-default) rounded hover:bg-(--bg-app) transition-colors">
                       <EyeIcon /> View
                     </button>
                     <button className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-(--text-secondary) border border-(--border-default) rounded hover:bg-(--bg-app) transition-colors">

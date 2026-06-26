@@ -5,16 +5,27 @@ import BookingForm from "../../components/bookings/BookingForm";
 import { Link } from "react-router-dom";
 import Consusltant from "../../assets/images/Home/consultant.jpg";
 import Professional from "../../assets/images/Home/professional.jpg";
+import { type Slot } from "../../components/bookings/TimeSlot";
 
-function QuickLink({ children }: { children: React.ReactNode }) {
-  return <li className="cursor-pointer hover:text-primary">{children}</li>;
+function QuickLink({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className: string;
+}) {
+  return (
+    <li className={`cursor-pointer hover:text-primary${className}`}>
+      {children}
+    </li>
+  );
 }
 
 function Home() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null);
 
-  function onSelectSlot(slot) {
+  function onSelectSlot(slot: Slot) {
     setSelectedSlot(slot);
   }
 
@@ -305,19 +316,19 @@ function Home() {
         <div className="mx-auto max-w-7xl px-6 py-10">
           <div className="flex flex-col md:flex-row md:justify-between gap-6">
             <div>
-                  <div className="text-xl font-bold">Apex Consulting</div>
-                  <div className="mt-2 text-sm text-text-muted">
-                    Executive advisory for strategic growth.
-                  </div>
+              <div className="text-xl font-bold">Apex Consulting</div>
+              <div className="mt-2 text-sm text-text-muted">
+                Executive advisory for strategic growth.
+              </div>
             </div>
             <div className="flex gap-12">
               <div>
                 <div className="font-semibold">Quick links</div>
-                    <ul className="mt-2 text-sm text-text-muted">
-                      <QuickLink className="cursor-pointer">Service</QuickLink>
-                      <QuickLink className="cursor-pointer">Pricing</QuickLink>
-                      <QuickLink className="cursor-pointer">Contact</QuickLink>
-                    </ul>
+                <ul className="mt-2 text-sm text-text-muted">
+                  <QuickLink className="cursor-pointer">Service</QuickLink>
+                  <QuickLink className="cursor-pointer">Pricing</QuickLink>
+                  <QuickLink className="cursor-pointer">Contact</QuickLink>
+                </ul>
               </div>
               <div>
                 <div className="font-semibold">Contact</div>

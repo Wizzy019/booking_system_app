@@ -30,7 +30,7 @@ export const createAvailability = async (
 };
 
 export const updateAvailability = async (
-  id: string,
+  id: string | undefined,
   data: UpdateAvailabilityPayload,
 ) => {
   const res = await api.patch(`/availability/${id}`, data);

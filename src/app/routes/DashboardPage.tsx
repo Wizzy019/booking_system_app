@@ -12,9 +12,8 @@ import { type Availability } from "../../components/dashboard/AvailabilityCard";
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedAvailability, setSelectedAvailability] = useState<
-    Availability[] | null
-  >(null);
+  const [selectedAvailability, setSelectedAvailability] =
+    useState<Availability | null>(null);
 
   return (
     <DashboardLayout>

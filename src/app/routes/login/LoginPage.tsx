@@ -47,8 +47,8 @@ export default function LoginPage(): React.JSX.Element {
     <div className="flex min-h-screen ">
       <LeftPanel />
 
-      <div className="flex-1 lg:max-w-[46%] flex items-center justify-center p-6 sm:p-10">
-        <div className="w-full flex justify-center">
+      <div className="flex-1 p-2 flex items-center justify-center">
+        <div className="flex justify-center">
           <LoginCard
             email={email}
             password={password}

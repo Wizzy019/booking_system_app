@@ -14,19 +14,26 @@ export interface AllSlots {
   booked: [];
 }
 
+export interface Slot {
+  start: number;
+  end: number;
+}
+
 export interface TimeSlotProps {
   selectedDate: Date | null;
-  onSelectSlot: (slot: object) => void;
+  onSelectSlot: (slot: Slot) => void;
 }
 
 function TimeSlot({ selectedDate, onSelectSlot }: TimeSlotProps) {
   const slotDate = formatDateToString(selectedDate);
+  console.log(selectedDate);
 
   const { data: slotsData } = useSlots(slotDate);
 
   const allSlots: AllSlots = slotsData;
   const availableSlots = allSlots?.available;
   const bookedSlots = allSlots?.booked;
+  console.log(allSlots);
 
   if (!selectedDate) return null;
 
@@ -66,8 +73,9 @@ function TimeSlot({ selectedDate, onSelectSlot }: TimeSlotProps) {
 
   return (
     <div className="grid grid-cols-1 gap-3">
-      {slots?.map((slot, index) => {
+      {slots?.map((slot: Slot, index) => {
         const isBookable = bookableSlots?.includes(slot.start);
+        console.log(slot);
         return (
           <button
             disabled={!isBookable}

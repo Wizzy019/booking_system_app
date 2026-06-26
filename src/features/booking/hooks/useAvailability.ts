@@ -45,7 +45,7 @@ export const useUpdateAvailability = () => {
       id,
       data,
     }: {
-      id: string;
+      id: string | undefined;
       data: UpdateAvailabilityPayload;
     }) => updateAvailability(id, data),
 

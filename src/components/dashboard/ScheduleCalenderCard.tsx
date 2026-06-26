@@ -140,7 +140,7 @@ export default function ScheduleCalendarCard() {
                         : "text-(--text-muted)"
                   }`}
                 >
-                  {day.n}
+                  {/* {day} */}
                 </button>
 
                 <span

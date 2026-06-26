@@ -83,7 +83,16 @@ function AvailabilityModal({ isOpen, onClose }: AvailabilityModalProps) {
       >
         <div className="flex items-center justify-between border-b p-4">
           <h2 className="text-xl font-semibold">Availability</h2>
-
+          <div>
+            {error && (
+              <div className="text-sm text-center text-danger">{error}</div>
+            )}
+            {success && (
+              <div className="font-medium text-center text-success">
+                {success}
+              </div>
+            )}
+          </div>
           <button onClick={onClose}>
             <X className="h-6 w-6" />
           </button>

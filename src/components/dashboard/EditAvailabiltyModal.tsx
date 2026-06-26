@@ -8,7 +8,7 @@ import { type Availability } from "../dashboard/AvailabilityCard";
 type EditAvailabilityModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  availability: Availability;
+  availability: Availability | null;
 };
 
 type FormData = {
@@ -57,11 +57,11 @@ function EditAvailabilityModal({
     };
 
     updateAvailabilityMutation.mutate(
-      { id: availability.id, data: payload },
+      { id: availability?.id, data: payload },
       {
         onError: (error) => {
           setError(getErrorMessage(error));
-          console.log(availability.id);
+          console.log(availability?.id);
 
           throw error;
         },

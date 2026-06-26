@@ -33,8 +33,6 @@ Backend
 
 📸 Screenshots
 
-Add screenshots of the application here.
-
 Dashboard
 
 "Dashboard Screenshot" (./screenshots/dashboard.png)
@@ -48,18 +46,18 @@ Booking Flow
 Prerequisites
 
 - Node.js (v18 or later)
-- npm or pnpm
+- npm
 - Backend API running locally or deployed
 
 Installation
 
 Clone the repository:
 
-git clone https://github.com/yourusername/your-repository-name.git
+git clone https://github.com/Wizzy019/booking_sysytem_app
 
 Navigate into the project directory:
 
-cd your-repository-name
+cd booking_sysytem_app
 
 Install dependencies:
 
@@ -67,7 +65,7 @@ npm install
 
 Create a ".env" file in the root directory and add:
 
-VITE_API_BASE_URL=your_api_url
+VITE_API_BASE_URL=bookingsystemapi-production-d728.up.railway.app
 
 Start the development server:
 

@@ -70,72 +70,6 @@ const BASE_ANGLES: number[] = Array.from(
   { length: N },
   (_, i) => (i / N) * Math.PI * 2 - Math.PI / 2,
 );
-
-// ─────────────────────────────────────────────────────────────
-//  LOGO MARK  — dual concentric hexagons + spokes + centre dot
-// ─────────────────────────────────────────────────────────────
-function ApexMark(): React.ReactElement {
-  const outerHex = "M24,3 L42.2,13.5 L42.2,34.5 L24,45 L5.8,34.5 L5.8,13.5 Z";
-  const innerHex = "M24,12 L34.4,18 L34.4,30 L24,36 L13.6,30 L13.6,18 Z";
-  const midHex = "M24,7.5 L38.3,16 L38.3,32 L24,40.5 L9.7,32 L9.7,16 Z";
-  const ink = "#0c1628";
-
-  // [x1, y1, x2, y2] — inner-hex vertex → outer-hex vertex pairs
-  const spokes: Array<[number, number, number, number]> = [
-    [24, 12, 24, 3],
-    [34.4, 18, 42.2, 13.5],
-    [34.4, 30, 42.2, 34.5],
-    [24, 36, 24, 45],
-    [13.6, 30, 5.8, 34.5],
-    [13.6, 18, 5.8, 13.5],
-  ];
-
-  return (
-    <svg
-      viewBox="0 0 48 48"
-      width={LOGO_PX}
-      height={LOGO_PX}
-      fill="none"
-      className="block"
-    >
-      {/* Outer hexagon */}
-      <path
-        d={outerHex}
-        stroke={ink}
-        strokeWidth="2.1"
-        strokeLinejoin="round"
-      />
-      {/* Mid hex — very faint fill for geometric depth */}
-      <path d={midHex} fill={ink} fillOpacity="0.045" />
-      {/* Inner hexagon */}
-      <path
-        d={innerHex}
-        stroke={ink}
-        strokeWidth="1.35"
-        fill={ink}
-        fillOpacity="0.07"
-        strokeLinejoin="round"
-      />
-      {/* Spokes at 42% of the gap — subtle architectural detail */}
-      {spokes.map(([x1, y1, x2, y2], i) => (
-        <line
-          key={i}
-          x1={x1}
-          y1={y1}
-          x2={lrp(x1, x2, 0.42)}
-          y2={lrp(y1, y2, 0.42)}
-          stroke={ink}
-          strokeWidth="1"
-          strokeOpacity="0.25"
-          strokeLinecap="round"
-        />
-      ))}
-      {/* Centre anchor dot */}
-      <circle cx="24" cy="24" r="3.6" fill={ink} />
-    </svg>
-  );
-}
-
 // ─────────────────────────────────────────────────────────────
 //  CANVAS PARTICLE RENDERER
 //  Pure canvas ops — called inside RAF, zero React state touched
@@ -302,8 +236,10 @@ export default function FintechLoader({
       drawParticles(ctx!, CX, CY, pAlpha, pRad, pOff);
 
       // ── Mutate logo DOM directly — no setState in hot path ──
-      logoEl.style.transform = `scale(${lScale})`;
-      logoEl.style.opacity = String(Math.max(0, lAlpha));
+      if (logoEl) {
+        logoEl.style.transform = `scale(${lScale})`;
+        logoEl.style.opacity = String(Math.max(0, lAlpha));
+      }
 
       rafRef.current = requestAnimationFrame(frame);
     }

@@ -103,9 +103,9 @@ export default function CalendarGrid({
               isAvailable={isAvailable}
               onSelect={() => isAvailable && onDateSelect(date)}
               onKeyDown={(e) => handleKeyDown(e, idx)}
-              ref={(el: HTMLButtonElement | null) =>
-                (refs.current[date.toDateString()] = el)
-              }
+              ref={(el: HTMLButtonElement | null) => {
+                refs.current[date.toDateString()] = el;
+              }}
             />
           );
         })}
